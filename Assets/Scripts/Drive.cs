@@ -20,6 +20,11 @@ public class Drive : MonoBehaviour
         {
             CalculateDistance();
         }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            CalculateAngle();
+        }
     }
 
     private void CalculateDistance()
@@ -34,5 +39,22 @@ public class Drive : MonoBehaviour
         
         Debug.Log("Calculated distance : " + distance);
         Debug.Log("Unity distance: " + unityDistance);
+    }
+
+    private void CalculateAngle()
+    {
+        Vector3 tankForward = transform.up;
+        Vector3 directionToFuel = fuel.transform.position - transform.position;
+        
+        Debug.DrawRay(transform.position, tankForward * 30, Color.green, 3f);
+        Debug.DrawRay(transform.position, directionToFuel, Color.red, 3f);
+
+        float dot = tankForward.x * directionToFuel.x + tankForward.y * directionToFuel.y;
+        float angle = Mathf.Acos(dot / (tankForward.magnitude * directionToFuel.magnitude)) * Mathf.Rad2Deg;
+
+        float unityAngle = Vector3.Angle(tankForward, directionToFuel);
+        
+        Debug.Log("Calculated angle : " + angle);
+        Debug.Log("Unity angle: " + unityAngle);
     }
 }
