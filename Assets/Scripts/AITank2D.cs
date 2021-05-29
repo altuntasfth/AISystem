@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class Drive : MonoBehaviour
+public class AITank2D : MonoBehaviour
 {
     public float speed = 10.0f;
     public float autoSpeed = 0.1f;
