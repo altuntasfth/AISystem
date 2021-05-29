@@ -56,5 +56,28 @@ public class Drive : MonoBehaviour
         
         Debug.Log("Calculated angle : " + angle);
         Debug.Log("Unity angle: " + unityAngle);
+
+        int clockwise = 1;
+        if (Cross(tankForward, directionToFuel).z < 0)
+            clockwise = -1;
+
+        float unitySignedAngle = Vector3.SignedAngle(tankForward, directionToFuel, transform.forward);
+        
+        // manuel return face
+        //transform.Rotate(0f, 0f, angle * clockwise);
+        
+        // unity auto return face
+        transform.Rotate(0f, 0f, unitySignedAngle);
+    }
+
+    private Vector3 Cross(Vector3 v, Vector3 w)
+    {
+        float xMultiplier = v.y * w.z - v.z * w.y;
+        float yMultiplier = v.z * w.x - v.x * w.z;
+        float zMultiplier = v.x * w.y - v.y * w.x;
+
+        Vector3 crossProduct = new Vector3(xMultiplier, yMultiplier, zMultiplier);
+
+        return crossProduct;
     }
 }
