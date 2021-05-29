@@ -5,8 +5,11 @@ using UnityEngine.UI;
 public class Drive : MonoBehaviour
 {
     public float speed = 10.0f;
+    public float autoSpeed = 0.1f;
     public float rotationSpeed = 100.0f;
     public Transform fuel;
+
+    private bool isAutoPilotEnable;
 
     private void Update()
     {
@@ -19,15 +22,22 @@ public class Drive : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             CalculateDistance();
+            CalculateAngle();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            isAutoPilotEnable = !isAutoPilotEnable;
         }
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (isAutoPilotEnable)
         {
-            CalculateAngle();
+            if (CalculateDistance() > 5)
+                AutoPilot();
         }
     }
 
-    private void CalculateDistance()
+    private float CalculateDistance()
     {
         Vector3 tankPos = transform.position;
         Vector3 fuelPos = fuel.position;
@@ -39,6 +49,8 @@ public class Drive : MonoBehaviour
         
         Debug.Log("Calculated distance : " + distance);
         Debug.Log("Unity distance: " + unityDistance);
+
+        return unityDistance;
     }
 
     private void CalculateAngle()
@@ -46,7 +58,7 @@ public class Drive : MonoBehaviour
         Vector3 tankForward = transform.up;
         Vector3 directionToFuel = fuel.transform.position - transform.position;
         
-        Debug.DrawRay(transform.position, tankForward * 30, Color.green, 3f);
+        Debug.DrawRay(transform.position, tankForward * 20, Color.green, 3f);
         Debug.DrawRay(transform.position, directionToFuel, Color.red, 3f);
 
         float dot = tankForward.x * directionToFuel.x + tankForward.y * directionToFuel.y;
@@ -67,7 +79,10 @@ public class Drive : MonoBehaviour
         //transform.Rotate(0f, 0f, angle * clockwise);
         
         // unity auto return face
-        transform.Rotate(0f, 0f, unitySignedAngle);
+        //transform.Rotate(0f, 0f, unitySignedAngle);
+        
+        // unity auto pilot return face
+        transform.Rotate(0f, 0f, unitySignedAngle * 0.1f);
     }
 
     private Vector3 Cross(Vector3 v, Vector3 w)
@@ -79,5 +94,11 @@ public class Drive : MonoBehaviour
         Vector3 crossProduct = new Vector3(xMultiplier, yMultiplier, zMultiplier);
 
         return crossProduct;
+    }
+
+    private void AutoPilot()
+    {
+        CalculateAngle();
+        transform.Translate(transform.up * autoSpeed, Space.World);
     }
 }

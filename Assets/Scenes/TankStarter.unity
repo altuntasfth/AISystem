@@ -395,6 +395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  autoSpeed: 0.5
   rotationSpeed: 100
   fuel: {fileID: 1970514136}
 --- !u!1001 &1459591077
